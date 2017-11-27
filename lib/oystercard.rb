@@ -12,4 +12,7 @@ class Oystercard
     @balance += added
   end
 
+  def deduct(subtracted)
+    @balance -= subtracted
+  end
 end
