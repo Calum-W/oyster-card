@@ -10,19 +10,41 @@ describe Oystercard do
   end
 
   describe "#top_up" do
+    before do
+      oystercard.top_up(Oystercard::DEFAULT_LIMIT)
+    end
     it "adds a given amount to the balance" do
-      expect{ subject.top_up 1 }.to change{ subject.balance }.by 1
+      expect(oystercard.balance).to be Oystercard::DEFAULT_LIMIT
     end
 
     it "raises an error when an added amount makes the balance exceed 90" do
-      oystercard.top_up(Oystercard::DEFAULT_LIMIT)
       expect{ oystercard.top_up(1) }.to raise_error("Exceeds balance limit (#{Oystercard::DEFAULT_LIMIT})")
     end
   end
 
   describe "#deduct" do
     it "deducts a given amount from the balance" do
-      expect{ subject.deduct 1 }.to change{ subject.balance }.by -1
+      expect{ oystercard.deduct 1 }.to change{ oystercard.balance }.by -1
+    end
+  end
+
+  describe "#touch_in" do
+    it "signals that the Oystercard has started a journey" do
+      oystercard.touch_in
+      expect(oystercard).to be_in_journey
+    end
+  end
+
+  describe "#touch_out" do
+    it "signals that the Oystercard has finished a journey" do
+      oystercard.touch_out
+      expect(oystercard).not_to be_in_journey
+    end
+  end
+
+  describe "#in_journey" do
+    it "returns true or false" do
+      expect(oystercard.in_journey?).to eq(true).or eq false
     end
   end
 end
