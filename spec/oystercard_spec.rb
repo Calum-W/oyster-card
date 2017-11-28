@@ -16,7 +16,7 @@ describe Oystercard do
       oystercard.top_up(Oystercard::DEFAULT_LIMIT)
     end
     it "adds a given amount to the balance" do
-      expect(oystercard.balance).to be Oystercard::DEFAULT_LIMIT
+      expect(oystercard.balance).to eq Oystercard::DEFAULT_LIMIT
     end
 
     it "raises an error when an added amount makes the balance exceed 90" do
