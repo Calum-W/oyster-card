@@ -49,11 +49,11 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MINIMUM_CHARGE)
       expect { oystercard.touch_out(station2) }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_CHARGE)
     end
-    it "sets an exit station" do
+    it "saves the journey as a hash inside the journeys array" do
       oystercard.top_up(Oystercard::MINIMUM_CHARGE)
       oystercard.touch_in(station)
       oystercard.touch_out(station2)
-      expect(oystercard.journeys[station]).to eq(station2)
+      expect(oystercard.journeys).to include({station => station2})
     end
   end
 
