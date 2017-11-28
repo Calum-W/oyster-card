@@ -2,6 +2,7 @@ require "oystercard"
 describe Oystercard do
 
   subject(:oystercard) { described_class.new }
+  let(:station) { double(:station)}
 
   describe "#initialization" do
     it "initializes with a balance of 0" do
@@ -25,11 +26,16 @@ describe Oystercard do
   describe "#touch_in" do
     it "signals that the Oystercard has started a journey" do
       oystercard.top_up(Oystercard::DEFAULT_MIN)
-      oystercard.touch_in
+      oystercard.touch_in(station)
       expect(oystercard).to be_in_journey
     end
     it "raises an error if the balance is less than 1" do
-      expect{ oystercard.touch_in }.to raise_error("Insufficient balance")
+      expect{ oystercard.touch_in(station) }.to raise_error("Insufficient balance")
+    end
+    it "sets an entry station" do
+      oystercard.top_up(Oystercard::DEFAULT_MIN)
+      oystercard.touch_in(station)
+      expect(oystercard.entry_station).to eq station
     end
   end
 
