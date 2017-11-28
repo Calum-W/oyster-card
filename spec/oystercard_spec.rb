@@ -22,12 +22,6 @@ describe Oystercard do
     end
   end
 
-  describe "#deduct" do
-    it "deducts a given amount from the balance" do
-      expect{ oystercard.deduct 1 }.to change{ oystercard.balance }.by -1
-    end
-  end
-
   describe "#touch_in" do
     it "signals that the Oystercard has started a journey" do
       oystercard.top_up(Oystercard::DEFAULT_MIN)
@@ -43,6 +37,10 @@ describe Oystercard do
     it "signals that the Oystercard has finished a journey" do
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
+    end
+    it "deducts the charge from the balance" do
+      oystercard.top_up(Oystercard::MINIMUM_CHARGE)
+      expect { oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_CHARGE)
     end
   end
 
