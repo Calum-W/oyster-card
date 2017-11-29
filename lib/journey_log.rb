@@ -6,9 +6,10 @@ class JourneyLog
   end
 
   def touch_in(entry)
+  	fare = in_journey? ? current_journey.fare : 0
     @current_journey = @journey_class.new(entry)
     add_journey
-    in_journey? ? current_journey.fare : 0
+    fare
   end
 
   def touch_out(station)
@@ -21,10 +22,12 @@ class JourneyLog
   	@journeys
   end
 
-private
+
   def in_journey?
     !!current_journey && !current_journey.complete?
   end
+
+private
 
   def add_journey
     @journeys << current_journey
