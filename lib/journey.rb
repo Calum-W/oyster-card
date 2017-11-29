@@ -11,7 +11,7 @@ class Journey
     @complete = false
   end
 
-  def finish(station = :no_touch)
+  def finish(station)
     @exit_station = station
     @complete = true
   end
