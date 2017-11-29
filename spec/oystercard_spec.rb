@@ -25,7 +25,7 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
-    it "signals that the Oystercard has started a journey" do
+    it "sets the card to be in journey" do
       oystercard.top_up(Oystercard::DEFAULT_MIN)
       oystercard.touch_in(station)
       expect(oystercard).to be_in_journey
@@ -33,10 +33,10 @@ describe Oystercard do
     it "raises an error if the balance is less than 1" do
       expect{ oystercard.touch_in(station) }.to raise_error("Insufficient balance")
     end
-    it "sets an entry station" do
-      oystercard.top_up(Oystercard::DEFAULT_MIN)
+    it "charges a penalty fare if the last journey wasn't completed" do
+      oystercard.top_up(Journey::MINIMUM_CHARGE)
       oystercard.touch_in(station)
-      expect(oystercard.entry_station).to eq station
+      expect{ oystercard.touch_in(station2) }.to change{ oystercard.balance }.by(-Journey::PENALTY_FARE)
     end
   end
 
@@ -46,14 +46,12 @@ describe Oystercard do
       expect(oystercard).not_to be_in_journey
     end
     it "deducts the charge from the balance" do
-      oystercard.top_up(Oystercard::MINIMUM_CHARGE)
-      expect { oystercard.touch_out(station2) }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_CHARGE)
-    end
-    it "saves the journey as a hash inside the journeys array" do
-      oystercard.top_up(Oystercard::MINIMUM_CHARGE)
+      oystercard.top_up(Journey::MINIMUM_CHARGE)
       oystercard.touch_in(station)
-      oystercard.touch_out(station2)
-      expect(oystercard.journeys).to include({station => station2})
+      expect { oystercard.touch_out(station2) }.to change{ oystercard.balance }.by(-Journey::MINIMUM_CHARGE)
+    end
+    it "charges a penalty fare if not in a journey" do
+      expect { oystercard.touch_out(station2) }.to change{ oystercard.balance }.by(-Journey::PENALTY_FARE)
     end
   end
 

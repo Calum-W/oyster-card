@@ -1,7 +1,7 @@
 require "station"
 
 describe Station do
-  subject(:station) { described_class.new(name: "Old Street", zone: 1) }
+  subject(:station) { described_class.new("Old Street", 1) }
 
   describe "initialization" do
     it "gives a name to the station instance which can be checked" do
