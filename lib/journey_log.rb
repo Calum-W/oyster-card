@@ -2,7 +2,7 @@ require_relative "journey.rb"
 class JourneyLog
   def initialize (journey_class = Journey)
   	@journey_class = journey_class
-  	 @journeys = []
+  	@journeys = []
   end
 
   def touch_in(entry)
@@ -13,7 +13,7 @@ class JourneyLog
   end
 
   def touch_out(station)
-    @current_journey = @journey_class.new(nil) if !current_journey
+    @current_journey ||= @journey_class.new(nil)
     current_journey.finish(station)
     current_journey.fare
   end
@@ -22,9 +22,8 @@ class JourneyLog
   	@journeys
   end
 
-
   def in_journey?
-    !!current_journey && !current_journey.complete?
+    !!(current_journey.entry_station && !current_journey.complete?)
   end
 
 private
@@ -34,6 +33,6 @@ private
   end
 
   def current_journey
-    @current_journey
+    @current_journey ||= @journey_class.new(nil)
   end
 end

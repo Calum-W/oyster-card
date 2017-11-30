@@ -1,25 +1,30 @@
 require 'journey_log'
+
 describe JourneyLog do
-	let(:journey)  {double(:journey, finish: nil, fare: nil, complete?: true)}
+
 	subject(:journey_log) { JourneyLog.new }
-	let(:station) { double(:station)}
+	let(:journey_class) { double(:journey_class, new: journey) }
+	let(:journey)  { double(:journey, finish: nil, fare: nil, entry_station: true, complete?: true) }
+	let(:station) { double(:station) }
+
   describe "#touch_in" do
     it "returns a penalty fare if touched in twice" do
       journey_log.touch_in(station)
-      expect(journey_log.touch_in(station)).to eq 6
+      expect(journey_log.touch_in(station)).to eq Journey::PENALTY_FARE
     end
   end
+
   describe "#touch_out" do
   	it "returns the fare" do
   	  journey_log.touch_in(station)
-  	  expect(journey_log.touch_out(station)).to eq 1
+  	  expect(journey_log.touch_out(station)).to eq Journey::MINIMUM_CHARGE
     end
-  end 
+  end
+
   describe "#journeys" do
-  	
+
   	it "returns a list of the journeys" do
-  	  journey_class = double(:journey_class, new: journey)
-  	  journey_log = JourneyLog.new(journey_class) 
+  	  journey_log = JourneyLog.new(journey_class)
 
   	  journey_log.touch_in(station)
   	  journey_log.touch_out(station)
