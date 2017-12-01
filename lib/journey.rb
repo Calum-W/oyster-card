@@ -17,7 +17,7 @@ class Journey
   end
 
   def fare
-    correct? ? MINIMUM_CHARGE : PENALTY_FARE
+    correct? ? ((@entry_station.zone - @exit_station.zone).abs + MINIMUM_CHARGE) : PENALTY_FARE
   end
 
   def complete?

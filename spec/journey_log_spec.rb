@@ -5,7 +5,8 @@ describe JourneyLog do
 	subject(:journey_log) { JourneyLog.new }
 	let(:journey_class) { double(:journey_class, new: journey) }
 	let(:journey)  { double(:journey, finish: nil, fare: nil, entry_station: true, complete?: true) }
-	let(:station) { double(:station) }
+	let(:station) { double(:station, zone: 1) }
+	let(:station4) { double(:station4, zone: 4) }
 
   describe "#touch_in" do
     it "returns a penalty fare if touched in twice" do
@@ -15,9 +16,13 @@ describe JourneyLog do
   end
 
   describe "#touch_out" do
-  	it "returns the fare" do
+  	it "returns the correct fare when second station is a higher zone" do
   	  journey_log.touch_in(station)
-  	  expect(journey_log.touch_out(station)).to eq Journey::MINIMUM_CHARGE
+  	  expect(journey_log.touch_out(station4)).to eq 4
+    end
+		it "returns the correct fare when second station is a lower zone" do
+  	  journey_log.touch_in(station4)
+  	  expect(journey_log.touch_out(station)).to eq 4
     end
   end
 

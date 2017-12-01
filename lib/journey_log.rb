@@ -13,13 +13,12 @@ class JourneyLog
   end
 
   def touch_out(station)
-    @current_journey ||= @journey_class.new(nil)
     current_journey.finish(station)
     current_journey.fare
   end
 
   def journeys
-  	@journeys
+  	@journeys.dup
   end
 
   def in_journey?
