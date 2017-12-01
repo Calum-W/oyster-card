@@ -1,5 +1,7 @@
 require_relative "journey.rb"
+
 class JourneyLog
+
   def initialize (journey_class = Journey)
   	@journey_class = journey_class
   	@journeys = []

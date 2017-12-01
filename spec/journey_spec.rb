@@ -16,6 +16,10 @@ describe Journey do
       bad_journey.finish(station)
       expect(bad_journey.complete?).to eq true
     end
+    it "sets the station passed in as the exit station" do
+      journey.finish(station)
+      expect(journey.exit_station).to eq station
+    end
   end
 
   describe "#fare" do
